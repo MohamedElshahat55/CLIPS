@@ -11,6 +11,6 @@ export class NavbarComponent {
 
   openModal(e: Event) {
     e.preventDefault();
-    this._modalService.isToggelingModal();
+    this._modalService.isToggelingModal('auth');
   }
 }

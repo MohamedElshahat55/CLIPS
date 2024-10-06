@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 
 @Component({
@@ -7,9 +7,10 @@ import { ModalService } from '../../services/modal.service';
   styleUrl: './modal.component.css',
 })
 export class ModalComponent {
+  @Input() modalId = '';
   constructor(public _modalService: ModalService) {}
 
   closeModal() {
-    return this._modalService.isToggelingModal();
+    return this._modalService.isToggelingModal(this.modalId);
   }
 }
