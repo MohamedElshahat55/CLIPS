@@ -7,7 +7,9 @@ import { ModalService } from '../../services/modal.service';
   styleUrl: './modal.component.css',
 })
 export class ModalComponent {
-  constructor(private _modalService: ModalService) {
-    console.log(this._modalService.visiable);
+  constructor(public _modalService: ModalService) {}
+
+  closeModal() {
+    return this._modalService.isToggelingModal();
   }
 }
