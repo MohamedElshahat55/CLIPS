@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-tap',
   templateUrl: './tap.component.html',
-  styleUrl: './tap.component.css'
+  styleUrl: './tap.component.css',
 })
 export class TapComponent {
-
+  @Input() tapTitle = ' ';
+  @Input() activeTap = false;
 }
