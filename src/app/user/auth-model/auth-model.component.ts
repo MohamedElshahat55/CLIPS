@@ -11,6 +11,9 @@ export class AuthModelComponent {
 
   ngOnInit(): void {
     this._modalService.register('auth');
-    this._modalService.register('test');
+  }
+
+  ngOnDestroy(): void {
+    this._modalService.unRegister('auth');
   }
 }
