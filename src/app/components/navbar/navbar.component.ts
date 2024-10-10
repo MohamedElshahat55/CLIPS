@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
+import { AuthService } from '../../services/auth.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -7,10 +9,19 @@ import { ModalService } from '../../services/modal.service';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  constructor(public _modalService: ModalService) {}
+  constructor(
+    public _modalService: ModalService,
+    public _authService: AuthService,
+    private _authFire: AngularFireAuth
+  ) {}
 
   openModal(e: Event) {
     e.preventDefault();
     this._modalService.isToggelingModal('auth');
+  }
+
+  logOut(e: Event) {
+    e.preventDefault();
+    this._authFire.signOut();
   }
 }
