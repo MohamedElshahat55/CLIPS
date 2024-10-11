@@ -2,9 +2,7 @@
 <header id="header" class="bg-secondary">
   <nav class="container mx-auto flex justify-start items-center py-8 px-4">
     <!-- App Name -->
-    <a
-      class="text-3xl text-indigo-400 font-bold uppercase mr-4"
-      href="index.html"
+    <a class="text-3xl text-indigo-400 font-bold uppercase mr-4" routerLink="/"
       >Clipz</a
     >
 
@@ -19,16 +17,22 @@
         </li>
         <ng-template #authLinks>
           <li>
-            <a class="px-2" href="#">Manage</a>
+            <a class="px-2" routerLink="/manage" routerLinkActive="active"
+              >Manage</a
+            >
           </li>
           <li>
-            <a class="px-2" href="#">Upload</a>
+            <a class="px-2" routerLink="/upload" routerLinkActive="active"
+              >Upload</a
+            >
           </li>
           <li>
-            <a class="px-2" href="about.html">About</a>
+            <a class="px-2" routerLink="/about" routerLinkActive="active"
+              >About</a
+            >
           </li>
           <li>
-            <a class="px-2" href="about.html" (click)="logOut($event)"
+            <a class="px-2" href="#" (click)="_authService.logOut($event)"
               >Logout</a
             >
           </li>
