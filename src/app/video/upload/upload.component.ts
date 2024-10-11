@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { last } from 'rxjs';
+import { last, switchMap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-upload',
@@ -15,13 +17,19 @@ export class UploadComponent {
   file: File | null = null;
   progressPrecent = 0;
   showProgress = false;
+  user: firebase.User | null = null;
 
   showAlert = false;
   alertMsg = 'Please wait! your clip is being uploaded.';
   alertColor = 'blue';
   isSubmission = false;
 
-  constructor(private _storage: AngularFireStorage) {}
+  constructor(
+    private _storage: AngularFireStorage,
+    private _auth: AngularFireAuth
+  ) {
+    _auth.user.subscribe((user) => (this.user = user));
+  }
 
   title = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
@@ -51,15 +59,31 @@ export class UploadComponent {
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
     const task = this._storage.upload(clipPath, this.file);
+    // get info about the clip from database
+    const clipRef = this._storage.ref(clipPath);
+
     task.percentageChanges().subscribe((progress) => {
       this.progressPrecent = (progress as number) / 100;
     });
 
     task
       .snapshotChanges()
-      .pipe(last())
+      .pipe(
+        last(),
+        switchMap(() => clipRef.getDownloadURL())
+      )
       .subscribe({
-        next: (snapshot) => {
+        next: (url) => {
+          const clip = {
+            uid: this.user?.uid,
+            displayName: this.user?.displayName,
+            title: this.title.value,
+            fileName: `${clipFileName}.mp4`,
+            url,
+          };
+
+          console.log(clip);
+
           this.alertMsg =
             'Success! your clip is now ready to share with the world.';
           this.showAlert = true;
