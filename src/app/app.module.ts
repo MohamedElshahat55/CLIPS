@@ -12,9 +12,10 @@ import { environment } from '../environments/environment';
 import { AboutComponent } from './components/about/about.component';
 import { VideoModule } from './video/video.module';
 import { HomeComponent } from './components/home/home.component';
+import { ClipComponent } from './components/clip/clip.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, AboutComponent, HomeComponent],
+  declarations: [AppComponent, NavbarComponent, AboutComponent, HomeComponent, ClipComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

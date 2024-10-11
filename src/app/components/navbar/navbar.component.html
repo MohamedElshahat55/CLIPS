@@ -17,7 +17,11 @@
         </li>
         <ng-template #authLinks>
           <li>
-            <a class="px-2" routerLink="/manage" routerLinkActive="active"
+            <a
+              class="px-2"
+              routerLink="/manage"
+              routerLinkActive="active"
+              [queryParams]="{ sort: '1' }"
               >Manage</a
             >
           </li>
