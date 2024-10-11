@@ -14,6 +14,7 @@ import { VideoModule } from './video/video.module';
 import { HomeComponent } from './components/home/home.component';
 import { ClipComponent } from './components/clip/clip.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 @NgModule({
   declarations: [
@@ -27,10 +28,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
   imports: [
     BrowserModule,
     UserModule,
-    VideoModule,
     AngularFireModule.initializeApp(environment.firebase), // Initialize Firebase
     AngularFireAuthModule, // Optional, for Authentication
     AngularFirestoreModule, // Optional, for Firestore
+    AngularFireStorageModule,
+    VideoModule,
     AppRoutingModule,
   ],
   providers: [],

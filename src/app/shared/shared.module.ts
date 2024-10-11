@@ -6,6 +6,7 @@ import { TapComponent } from './tap/tap.component';
 import { InputComponent } from './input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './alert/alert.component';
+import { EventBlokerDirective } from './event-blocker.directive';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { AlertComponent } from './alert/alert.component';
     TapComponent,
     InputComponent,
     AlertComponent,
+    EventBlokerDirective,
   ],
   imports: [CommonModule, ReactiveFormsModule],
   exports: [
@@ -22,6 +24,7 @@ import { AlertComponent } from './alert/alert.component';
     TapComponent,
     InputComponent,
     AlertComponent,
+    EventBlokerDirective,
   ],
 })
 export class SharedModule {}
