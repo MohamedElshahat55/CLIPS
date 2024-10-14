@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { last, switchMap } from 'rxjs';
+import { last, switchMap, timestamp } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
+import { ClipsService } from '../../services/clips.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -26,7 +28,9 @@ export class UploadComponent {
 
   constructor(
     private _storage: AngularFireStorage,
-    private _auth: AngularFireAuth
+    private _auth: AngularFireAuth,
+    private _clipsService: ClipsService,
+    private _router: Router
   ) {
     _auth.user.subscribe((user) => (this.user = user));
   }
@@ -51,6 +55,8 @@ export class UploadComponent {
   }
 
   uploadFile() {
+    this.uploadForm.disable();
+
     this.alertMsg = 'Please wait! your account is being created.';
     this.showAlert = true;
     this.alertColor = 'blue';
@@ -59,7 +65,7 @@ export class UploadComponent {
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
     const task = this._storage.upload(clipPath, this.file);
-    // get info about the clip from database
+    // store info about the clip to database
     const clipRef = this._storage.ref(clipPath);
 
     task.percentageChanges().subscribe((progress) => {
@@ -73,24 +79,30 @@ export class UploadComponent {
         switchMap(() => clipRef.getDownloadURL())
       )
       .subscribe({
-        next: (url) => {
+        next: async (url) => {
           const clip = {
-            uid: this.user?.uid,
-            displayName: this.user?.displayName,
-            title: this.title.value,
+            uid: this.user?.uid as string,
+            displayName: this.user?.displayName as string,
+            title: this.title.value as string,
             fileName: `${clipFileName}.mp4`,
             url,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           };
 
-          console.log(clip);
+          const clipRef = await this._clipsService.createClip(clip);
 
           this.alertMsg =
             'Success! your clip is now ready to share with the world.';
           this.showAlert = true;
           this.alertColor = 'green';
           this.showProgress = false;
+          setTimeout(() => {
+            this._router.navigate(['clip', clipRef.id]);
+          }, 1000);
+          console.log(clip);
         },
         error: (error) => {
+          this.uploadForm.enable();
           this.alertMsg = 'Upload failed! please try again later.';
           this.showAlert = true;
           this.alertColor = 'red';
